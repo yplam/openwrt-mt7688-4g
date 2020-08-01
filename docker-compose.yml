@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  compiler:
+    build:
+      context: ./docker/compiler
+      network: host
+    volumes:
+      - ./src:/src
+    environment:
+      - http_proxy=http://host.docker.internal:8123
+      - https_proxy=http://host.docker.internal:8123
+    entrypoint: 
+      - /bin/sh
+      - -c 
+      - ip -4 route list match 0/0 | awk '{print $$3" host.docker.internal"}' >> /etc/hosts && tail -f /dev/null
